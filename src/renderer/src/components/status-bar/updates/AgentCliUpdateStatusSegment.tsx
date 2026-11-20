@@ -41,6 +41,7 @@ export function AgentCliUpdateStatusSegment(): React.JSX.Element | null {
   const t = useTranslate()
   const hosts = useAppStore((s) => s.agentCliUpdates)
   const hostNames = useAppStore(useShallow(remoteHostNames))
+  const paired = useAppStore((s) => s.runtimeEnvironments.length > 0)
   const checkAgentCliUpdates = useAppStore((s) => s.checkAgentCliUpdates)
   // This computer is checked at launch; other hosts when a chat starts there.
   useEffect(() => {
@@ -52,16 +53,17 @@ export function AgentCliUpdateStatusSegment(): React.JSX.Element | null {
       .map(([hostKey, host]) => ({ hostKey, rows: agentCliUpdateRows(hostKey, host) }))
       .filter((group) => group.rows.length > 0)
       .sort((a, b) => (a.hostKey === '' ? -1 : b.hostKey === '' ? 1 : 0))
-    const remote = listed.some((group) => group.hostKey !== '')
+    // Paired windows always name the machine, so a local-only list isn't mistaken for the server's.
+    const named = paired || listed.some((group) => group.hostKey !== '')
     return listed.map((group) => ({
       ...group,
-      label: !remote
+      label: !named
         ? null
         : group.hostKey === ''
           ? t('agentCliUpdate.thisComputer', 'This computer')
           : (hostNames[group.hostKey] ?? group.hostKey)
     }))
-  }, [hosts, hostNames, t])
+  }, [hosts, hostNames, paired, t])
 
   const rows = groups.flatMap((group) => group.rows)
   if (rows.length === 0) {
