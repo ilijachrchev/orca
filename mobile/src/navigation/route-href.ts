@@ -1,4 +1,5 @@
 import type { RouteHandoff } from './route-handoff'
+import { encodeUriComponentSafe } from './uri-component-encoding'
 
 export type RouterHref = Parameters<RouteHandoff['push']>[0]
 
@@ -6,7 +7,7 @@ const DYNAMIC_SEGMENT = /^\[(?:\.\.\.)?(.+)\]$/
 
 // Expo permits null params; encode them as empty segments instead of literal null.
 function encodeSegment(value: string | number | null): string {
-  return value === null ? '' : encodeURIComponent(String(value))
+  return value === null ? '' : encodeUriComponentSafe(String(value))
 }
 
 // Resolve object hrefs like Expo: fill dynamic path segments and send remaining params as query; String(object) is not a route.
