@@ -3,6 +3,7 @@ import {
   isPageStorageKey,
   isPageStorageKeyForRoute,
   pageRouteWorkspace,
+  workspaceScopedKey,
   pageStorageEntriesForInit,
   PAGE_STORAGE_MAX_VALUE_CHARS
 } from './page-storage-keys'
@@ -99,5 +100,19 @@ describe('what init may carry', () => {
   it('keeps a value of exactly the bound, so the drop above discriminates', () => {
     const at = { 'orca:custom-accessory-keys': 'x'.repeat(PAGE_STORAGE_MAX_VALUE_CHARS) }
     expect(pageStorageEntriesForInit(at)).toEqual({ entries: at, dropped: [], oversize: [] })
+  })
+})
+
+describe('workspaceScopedKey with lone surrogates', () => {
+  it('replaces a lone surrogate instead of throwing URIError', () => {
+    expect(workspaceScopedKey('orca:terminalDrafts:', 'host\uD83D', 'wt\uDE00x')).toBe(
+      'orca:terminalDrafts:host%EF%BF%BD:wt%EF%BF%BDx'
+    )
+  })
+
+  it('keeps a well-formed surrogate pair', () => {
+    expect(workspaceScopedKey('orca:terminalDrafts:', 'h', '\uD83D\uDE00')).toBe(
+      'orca:terminalDrafts:h:%F0%9F%98%80'
+    )
   })
 })

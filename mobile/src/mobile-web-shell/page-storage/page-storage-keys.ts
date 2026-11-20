@@ -1,3 +1,5 @@
+import { encodeUriComponentSafe } from '../../navigation/uri-component-encoding'
+
 /**
  * Which of the app's stored keys the page may read and write, and how much of each.
  *
@@ -141,12 +143,12 @@ const WORKSPACE_KEY_PREFIXES = [
 ] as const
 
 export function workspaceScopedKey(prefix: string, hostId: string, worktreeId: string): string {
-  return `${prefix}${encodeURIComponent(hostId)}:${encodeURIComponent(worktreeId)}`
+  return `${prefix}${encodeUriComponentSafe(hostId)}:${encodeUriComponentSafe(worktreeId)}`
 }
 
 // Host-area pages may access any workspace here; encoded host ids contain no colon, preventing cross-host prefix matches.
 export function isHostWorkspaceStorageKey(key: string, hostId: string): boolean {
-  const scope = `${encodeURIComponent(hostId)}:`
+  const scope = `${encodeUriComponentSafe(hostId)}:`
   return (
     isPageStorageKey(key) &&
     WORKSPACE_KEY_PREFIXES.some(

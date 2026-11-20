@@ -3,6 +3,7 @@ import { firstParam } from '../../navigation/route-param-reader'
 import { shellScreenRoute, shellScreenRouteKey } from './shell-screen-route'
 import { MobileWebShellScreen } from '../MobileWebShellScreen'
 import { PageRouteUnavailableScreen } from '../presentation/PageRouteUnavailableScreen'
+import { encodeUriComponentSafe } from '../../navigation/uri-component-encoding'
 
 // Hand unknown host-scoped routes to the shell so newer desktop bundles can serve screens absent from this app; appNamesRoute:false avoids blaming the desktop for stale deep links.
 // Keep platform siblings under src: Expo Router 55 parses the dots in [...page].web.tsx as an empty platform, while Metro resolves the plain stem correctly here. Re-encode decoded route segments.
@@ -21,7 +22,7 @@ export default function MobileWebPageCatchAllScreen() {
   const route =
     hostId && segments.length > 0
       ? shellScreenRoute({
-          pathname: `/h/${encodeURIComponent(hostId)}/${segments.map(encodeURIComponent).join('/')}`,
+          pathname: `/h/${encodeUriComponentSafe(hostId)}/${segments.map(encodeUriComponentSafe).join('/')}`,
           ...(Object.keys(query).length === 0 ? {} : { params: query })
         })
       : null

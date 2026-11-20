@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { persistMirrored } from './mirrored-storage-keys'
 import type { AgentLaunchSurface } from '../../../src/shared/agent-launch/contracts/agent-launch-surface'
+import { encodeUriComponentSafe } from '../navigation/uri-component-encoding'
 
 export type MobileSessionView = 'terminal' | 'chat'
 
@@ -14,7 +15,7 @@ let defaultViewWriteBarrier: Promise<void> | null = null
 const overrideUpdateBarriers = new Map<string, Promise<void>>()
 
 function sessionViewOverridesKey(hostId: string, worktreeId: string): string {
-  return `${NATIVE_CHAT_TABS_PREFIX}${encodeURIComponent(hostId)}:${encodeURIComponent(worktreeId)}`
+  return `${NATIVE_CHAT_TABS_PREFIX}${encodeUriComponentSafe(hostId)}:${encodeUriComponentSafe(worktreeId)}`
 }
 
 function clearDefaultViewWriteBarrier(barrier: Promise<void>): void {
