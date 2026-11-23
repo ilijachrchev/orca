@@ -34,7 +34,7 @@ Use these _only_ for git status. Don't reuse them for unrelated state colors —
 
 ## Agent status colors
 
-Agent state glyphs (`AgentStateDot`, the sidebar `StatusIndicator`) paint from the `--agent-*` tokens: `working`, `question` (waiting or needs attention), `done`, `error` (blocked or failed), `unverified` (no recent update or couldn't confirm) and `idle`. Interrupted stays `--muted-foreground`. App themes may override all six. Use them only for agent state.
+Agent state glyphs (`AgentStateDot`, the sidebar `StatusIndicator`) paint from the `--agent-*` tokens: `working`, `question` (waiting or needs attention), `done`, `error` (blocked or failed), `unverified` (no recent update or couldn't confirm) and `idle`. Interrupted stays `--muted-foreground`. App themes may override all six. Use them only for agent state. Icon themes may replace the glyphs themselves through `agent-*` slots ([plugin themes](../reference/plugin-themes.md#agent-status-icons)); a monochrome themed icon takes the same token as text color.
 
 Diff hunks (line, changed-character and gutter tints in chat diffs and Monaco's diff editor) use `--diff-added` / `--diff-removed` and their `-background`, `-emphasis` and `-gutter` tints instead. The hues default to the matching decoration colors, so themes can tune diffs separately from file status. Diff _text_ in chat uses `text-chat-diff-added` / `text-chat-diff-removed`.
 
