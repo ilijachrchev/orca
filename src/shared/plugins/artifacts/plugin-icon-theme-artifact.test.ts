@@ -40,3 +40,15 @@ describe('isPluginIconThemeRegistration', () => {
     ).toBe(true)
   })
 })
+
+describe('agent status icon slots', () => {
+  it('parses agent slots beside file slots in strict and tolerant modes', () => {
+    const raw = JSON.stringify({
+      schemaVersion: 1,
+      icons: { folder: 'folder.svg', 'agent-done': 'done.svg', 'agent-idle': 'idle.svg' }
+    })
+    const expected = { folder: 'folder.svg', 'agent-done': 'done.svg', 'agent-idle': 'idle.svg' }
+    expect(parsePluginIconThemeArtifact(raw, 'strict').icons).toEqual(expected)
+    expect(parsePluginIconThemeArtifact(raw).icons).toEqual(expected)
+  })
+})

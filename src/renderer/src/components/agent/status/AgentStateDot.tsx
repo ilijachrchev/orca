@@ -6,6 +6,11 @@ import { useTranslate } from '@/i18n/use-translate'
 import { AgentQuestionIcon } from '@/components/agent/status/AgentQuestionIcon'
 import { AgentWorkingSpinner } from '@/components/agent/status/AgentWorkingSpinner'
 import {
+  AgentStatusThemeIcon,
+  agentStateIconSlot,
+  useAgentStatusThemeIconIndex
+} from '@/components/agent/status/AgentStatusThemeIcon'
+import {
   AgentProgressRing,
   formatAgentProgressPercent,
   type AgentProgressRingTone
@@ -111,6 +116,8 @@ export const AgentStateDot = React.memo(function AgentStateDot({
       })
     : withRingPercent(agentStateLabel(state), ring)
   const tooltipLabel = title === null ? null : (title ?? label)
+  const themeSlot = agentStateIconSlot(state)
+  const themeIconIndex = useAgentStatusThemeIconIndex(themeSlot)
 
   let indicator: React.JSX.Element
 
@@ -119,6 +126,15 @@ export const AgentStateDot = React.memo(function AgentStateDot({
     indicator = (
       <span className={cn('inline-flex shrink-0 items-center justify-center', box, className)}>
         <AgentProgressRing percent={ring.percent} tone={ring.tone} label={label} className={icon} />
+      </span>
+    )
+  } else if (themeIconIndex !== null) {
+    indicator = (
+      <span
+        className={cn('inline-flex shrink-0 items-center justify-center', box, className)}
+        aria-label={label}
+      >
+        <AgentStatusThemeIcon slot={themeSlot} index={themeIconIndex} className={icon} />
       </span>
     )
   } else if (state === 'working') {

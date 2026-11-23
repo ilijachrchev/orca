@@ -2,6 +2,7 @@ import { File, FileCog, FileLock, FileTerminal, type LucideIcon } from 'lucide-r
 import { COMPOUND_EXTENSIONS, FILE_ICON_BY_EXTENSION } from './file-type-icon-extension-table'
 import { FILE_ICON_BY_NAME } from './file-type-icon-name-table'
 import type { ActivePluginIconTheme } from '../../store/plugins/appearance/plugin-icon-themes'
+import type { PluginIconThemeSlot } from '../../../../shared/plugins/artifacts/plugin-icon-theme-artifact'
 
 function getFilename(filePath: string | undefined | null): string {
   if (!filePath) {
@@ -64,6 +65,14 @@ function ownIconIndex(entries: Partial<Record<string, number>>, key: string): nu
   }
   const index = entries[key]
   return Number.isInteger(index) && index !== undefined && index >= 0 ? index : null
+}
+
+/** The active plugin icon theme's icon index for one of its `icons` slots. */
+export function getPluginSlotIconIndex(
+  theme: ActivePluginIconTheme | null,
+  slot: PluginIconThemeSlot
+): number | null {
+  return theme ? ownIconIndex(theme.icons, slot) : null
 }
 
 // Longest dotted suffix first, so a theme's `d.ts` wins over `ts` and `gz` still matches `a.tar.gz`.

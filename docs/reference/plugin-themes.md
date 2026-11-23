@@ -214,3 +214,43 @@ common names.
 - `rootFolder`, `rootFolderNames`, `languageIds` and font icons aren't supported.
   Orca's explorer has no workspace-root row for a root icon. `pnpm validate:plugin` flags these
   keys, and Orca skips them at runtime.
+
+### Agent status icons
+
+`icons` can also replace the agent status glyphs shown on agent rows, terminal tabs and sidebar
+workspace cards. Each slot covers the states that share a glyph today:
+
+| Slot                | States                                 | Built-in glyph            | Color token          |
+| ------------------- | -------------------------------------- | ------------------------- | -------------------- |
+| `agent-working`     | Working                                | Spinning ring             | `--agent-working`    |
+| `agent-monitoring`  | Monitoring background tasks            | Pulse line                | `--agent-working`    |
+| `agent-waiting`     | Waiting for input, needs attention     | Question bubble           | `--agent-question`   |
+| `agent-done`        | Done                                   | Check (rows), dot (cards) | `--agent-done`       |
+| `agent-failed`      | Blocked, failed                        | Dot                       | `--agent-error`      |
+| `agent-interrupted` | Interrupted                            | Dot                       | `--muted-foreground` |
+| `agent-unconfirmed` | No recent update, couldn't confirm     | Dashed ring               | `--agent-unverified` |
+| `agent-idle`        | Idle, and workspaces with no terminals | Dot                       | `--agent-idle`       |
+
+```json
+{
+  "schemaVersion": 1,
+  "icons": {
+    "agent-working": "icons/agent-working.svg",
+    "agent-waiting": "icons/agent-waiting.svg",
+    "agent-done": "icons/agent-done.svg",
+    "agent-failed": "icons/agent-failed.svg"
+  }
+}
+```
+
+- A slot you leave out keeps Orca's built-in glyph, so a theme can replace only some states.
+  One `agent-done` icon replaces both the row check and the sidebar card dot. A workspace with
+  a quiet terminal but no agent status keeps the built-in dot.
+- An SVG painted only with `currentColor` takes the state's color token, so it follows the app
+  theme's `--agent-*` colors. Any other SVG keeps its own colors.
+- When an agent reports progress, Orca still draws its built-in progress ring for working,
+  waiting, blocked and needs-attention states.
+- Icons are drawn still. SVG animation is stripped, and Orca doesn't spin `agent-working`.
+- Tooltips and screen reader labels stay Orca's own.
+- Status slots count toward the 512-mapping limit. Older Orca releases skip these slots and
+  keep the built-in glyphs.
