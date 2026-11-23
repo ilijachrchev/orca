@@ -6,7 +6,25 @@ import {
   type PluginArtifactStrictness
 } from './plugin-theme-artifact'
 
-export const PLUGIN_ICON_THEME_SLOTS = ['file', 'folder', 'folder-open'] as const
+/** One slot per agent status glyph; states that share a glyph today share a slot. */
+export const PLUGIN_AGENT_STATUS_ICON_SLOTS = [
+  'agent-working',
+  'agent-monitoring',
+  'agent-waiting',
+  'agent-done',
+  'agent-failed',
+  'agent-interrupted',
+  'agent-unconfirmed',
+  'agent-idle'
+] as const
+export type PluginAgentStatusIconSlot = (typeof PLUGIN_AGENT_STATUS_ICON_SLOTS)[number]
+
+export const PLUGIN_ICON_THEME_SLOTS = [
+  'file',
+  'folder',
+  'folder-open',
+  ...PLUGIN_AGENT_STATUS_ICON_SLOTS
+] as const
 export type PluginIconThemeSlot = (typeof PLUGIN_ICON_THEME_SLOTS)[number]
 
 const ICON_THEME_MAPPING_LIMIT = 512
