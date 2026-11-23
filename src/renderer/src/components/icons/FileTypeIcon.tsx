@@ -12,7 +12,12 @@ import {
 
 type IconProps = { className?: string; style?: CSSProperties }
 
-function PluginIcon({ index, className, style }: IconProps & { index: number }): React.JSX.Element {
+/** One registered icon-theme SVG, drawn by its shared CSS rule. */
+export function PluginIcon({
+  index,
+  className,
+  style
+}: IconProps & { index: number }): React.JSX.Element {
   return (
     <span
       aria-hidden="true"

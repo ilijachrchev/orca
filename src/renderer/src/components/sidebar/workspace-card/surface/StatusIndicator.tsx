@@ -3,6 +3,11 @@ import { Activity } from 'lucide-react'
 import { cn } from '@/lib/class-names'
 import { AgentQuestionIcon } from '@/components/agent/status/AgentQuestionIcon'
 import { AgentStateDot } from '@/components/agent/status/AgentStateDot'
+import {
+  AgentStatusThemeIcon,
+  useAgentStatusThemeIconIndex,
+  worktreeStatusIconSlot
+} from '@/components/agent/status/AgentStatusThemeIcon'
 import { AgentWorkingSpinner } from '@/components/agent/status/AgentWorkingSpinner'
 import {
   StateIndicatorTooltip,
@@ -38,9 +43,20 @@ const StatusIndicator = React.memo(function StatusIndicator({
 }: StatusIndicatorProps) {
   const tooltipLabel =
     showTooltip && AGENT_STATUS_TOOLTIP_STATUSES.has(status) ? getWorktreeStatusLabel(status) : null
+  const themeSlot = worktreeStatusIconSlot(status)
+  const themeIconIndex = useAgentStatusThemeIconIndex(themeSlot)
   let indicator: React.JSX.Element
 
-  if (status === 'working') {
+  if (themeSlot && themeIconIndex !== null) {
+    indicator = (
+      <span
+        className={cn('inline-flex h-3 w-3 shrink-0 items-center justify-center', className)}
+        {...rest}
+      >
+        <AgentStatusThemeIcon slot={themeSlot} index={themeIconIndex} className="size-3" />
+      </span>
+    )
+  } else if (status === 'working') {
     indicator = (
       <span
         className={cn('inline-flex h-3 w-3 shrink-0 items-center justify-center', className)}
